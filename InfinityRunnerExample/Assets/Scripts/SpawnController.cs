@@ -12,6 +12,9 @@ public class SpawnController : MonoBehaviour
     private float currentTime;
     private int positionChecker;
     private float yPosition;
+    private float positionA = 2.5f;
+    private float positionB = 3.75f;
+
 	void Start ()
     {
         currentTime = 0f;
@@ -28,11 +31,11 @@ public class SpawnController : MonoBehaviour
 
             if(positionChecker > 50)
             {
-                yPosition = -0.03f;      
+                yPosition = positionA;      
             }
             else
             {
-                yPosition = 0.60f;
+                yPosition = positionB;
             }
 
             GameObject tempObstacle = Instantiate(obstacle) as GameObject;

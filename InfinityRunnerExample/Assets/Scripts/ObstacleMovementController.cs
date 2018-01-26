@@ -5,14 +5,18 @@ using UnityEngine;
 public class ObstacleMovementController : MonoBehaviour
 {
 
-    private const float speed = -2f;
+    private const float speed = -2.15f;
 
     private Transform GroundObstacleTransform;
+    private GameObject player;
+
     private float xPosition;
+    private bool scored;
 
     void Start()
     {
         GroundObstacleTransform = GetComponent<Transform>();
+        player = GameObject.Find("Player");
     }
 
     void Update()
@@ -31,6 +35,12 @@ public class ObstacleMovementController : MonoBehaviour
         if(xPosition <= -7)
         {
             Destroy(this.gameObject);
+        }
+
+        if(xPosition < player.transform.position.x && scored == false)
+        {
+            scored = true;
+            PlayerController.score++;
         }
     }
 }
