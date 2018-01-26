@@ -14,47 +14,63 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D playerRigidbody;
     private Animator playerAnimator;
     private GameObject groundCheck;
+    private GameObject colisor;
 
     private float timer;
     private bool isOnGround = false;
     private bool slide = false;
 
-    void Start ()
+    void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
         groundCheck = GameObject.Find("GroundCheck");
-
+        colisor = GameObject.Find("Colisor");
         Debug.Log("Player Started.");
-	}
-	
-	void Update ()
+    }
+
+    void Update()
     {
-        if(Input.GetButtonDown("Jump") && isOnGround)
+        if (Input.GetButtonDown("Jump") && isOnGround)
         {
             playerRigidbody.AddForce(new Vector2(0, jumpForce));
-            slide = false;
+
+            if (slide == true)
+            {
+                colisor.transform.position = new Vector3(colisor.transform.position.x,
+                    colisor.transform.position.y + 0.3f, colisor.transform.position.z);
+                slide = false;
+            }
         }
 
-        if (Input.GetButtonDown("Slide") && isOnGround)
+        if (Input.GetButtonDown("Slide") && isOnGround && !slide)
         {
+            colisor.transform.position = new Vector3(colisor.transform.position.x,
+                colisor.transform.position.y - 0.3f, colisor.transform.position.z);
             slide = true;
             timer = 0f;
         }
 
         isOnGround = Physics2D.OverlapCircle(groundCheck.transform.position, 0.2f, groundLayer);
-        
-        if(slide == true)
+
+        if (slide == true)
         {
             timer += Time.deltaTime;
 
-            if(timer >= slideTime)
+            if (timer >= slideTime)
             {
+                colisor.transform.position = new Vector3(colisor.transform.position.x,
+                    colisor.transform.position.y + 0.3f, colisor.transform.position.z);
                 slide = false;
             }
         }
 
         playerAnimator.SetBool("jump", !isOnGround);
         playerAnimator.SetBool("slide", slide);
+    }
+
+    private void OnTriggerEnter2D()
+    {
+        Debug.Log("bateu");
     }
 }
